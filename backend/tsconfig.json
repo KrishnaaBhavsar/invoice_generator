@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    /* Language and Environment */
+    "target": "esnext",                       /* Set the JavaScript language version for emitted JavaScript. */
+    "lib": ["esnext"],                        /* Include the runtime library files for modern JS features. */
+    "module": "commonjs",                     /* Compile to CommonJS modules for Node.js. */
+    "moduleResolution": "node",               /* Use Node.js module resolution algorithm. */
+    "esModuleInterop": true,                  /* Allow default imports from CommonJS modules. */
+    "resolveJsonModule": true,                /* Enable importing .json files. */
+
+    /* Output Settings */
+    "outDir": "dist",                         /* Redirect output structure to the 'dist' directory. */
+    "rootDir": "src",                         /* Specify the root folder within your source files. */
+    "sourceMap": true,                        /* Emit source maps for easier debugging. */
+
+    /* Strict Type-Checking Options */
+    "strict": true,                           /* Enable all strict type-checking options. */
+    "forceConsistentCasingInFileNames": true, /* Ensure file names are case-consistent. */
+    "skipLibCheck": true                      /* Skip type checking of declaration files (.d.ts). */
+  },
+  "include": ["src"],                         /* Include all TypeScript files inside 'src'. */
+  "exclude": ["node_modules", "dist"]         /* Exclude dependencies and build output. */
+}
