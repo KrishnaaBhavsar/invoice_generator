@@ -18,18 +18,18 @@ declare global {
 const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
 
-  console.log("Auth Header Received:", authHeader);
+  //console.log("Auth Header Received:", authHeader);
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res.status(401).json({ message: "No token provided" });
   }
 
   const token = authHeader.split(" ")[1];
-  console.log("Extracted Token:", token);
+  //console.log("Extracted Token:", token);
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET || "secretkey") as JwtPayload;
-    console.log("Decoded Payload:", decoded);
+    //console.log("Decoded Payload:", decoded);
     req.userId = decoded.id; // ✅ inject userId automatically
     next();
   } catch (error) {
