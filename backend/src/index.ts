@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import connectDB from "./config";
 import authRoutes from "./routes/authRoutes";
 import productRoutes from "./routes/productRoutes";
+import invoiceRoutes from "./routes/invoiceRoutes";
 dotenv.config();
 
 
@@ -16,6 +17,7 @@ connectDB();
 
 app.use("/api/auth", authRoutes);
 app.use("/products", productRoutes);
+app.use("/invoices", invoiceRoutes);
 
 
 const PORT= process.env.PORT || 5000;

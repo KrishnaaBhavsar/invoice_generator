@@ -5,9 +5,9 @@ import Product from "../models/Product";
 
 export const addProduct = async (req: Request, res: Response) => {
   try {
-    const { name, qty, rate, userId } = req.body;
+    const { name, qty, rate } = req.body;
 
-    if (!name || !qty || !rate || !userId) {
+    if (!name || !qty || !rate ) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -20,7 +20,7 @@ export const addProduct = async (req: Request, res: Response) => {
       rate,
       total,
       gst,
-      user: userId,
+      userId: req.userId,
     });
 
     await product.save();
@@ -33,7 +33,7 @@ export const addProduct = async (req: Request, res: Response) => {
 // Get all products
 export const getProducts = async (req: Request, res: Response) => {
   try {
-    const products = await Product.find({ user: req.userId }); // ✅ use req.userId
+    const products = await Product.find({ userId: req.userId }); // ✅ use req.userId
     res.json(products);
   } catch (error) {
     res.status(500).json({ message: "Error fetching products", error });

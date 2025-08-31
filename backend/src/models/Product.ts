@@ -7,7 +7,7 @@ export interface IProduct extends Document {
   rate: number;
   total: number;
   gst: number;
-  user: mongoose.Schema.Types.ObjectId;
+  userId: mongoose.Schema.Types.ObjectId;
 }
 
 const productSchema = new Schema<IProduct>({
@@ -16,7 +16,7 @@ const productSchema = new Schema<IProduct>({
   rate: { type: Number, required: true },
   total: { type: Number, required: true },
   gst: { type: Number, required: true },
-  user: { type: Schema.Types.ObjectId, ref: "user", required: true },
+  userId: { type: Schema.Types.ObjectId, ref: "user", required: true },
 });
 
 const Product = mongoose.model<IProduct>("product", productSchema);
