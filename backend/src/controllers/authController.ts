@@ -1,11 +1,10 @@
 // Functions for signup/login logic.
-
 import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import user from "../models/user";   // ✅ lowercase import
+import user, { IUser } from "../models/user";   // ✅ lowercase import
+import generateToken from "../utils/generateToken";
 
-const JWT_SECRET = process.env.JWT_SECRET || "secretkey";
 
 // Signup
 export const signup = async (req: Request, res: Response) => {
@@ -29,20 +28,38 @@ export const signup = async (req: Request, res: Response) => {
 // Login
 export const login = async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body;
+   const { email, password } = req.body;
 
-    const foundUser = await user.findOne({ email });
-    if (!foundUser) return res.status(400).json({ message: "Invalid credentials" });
+    // find user by email
+    const foundUser: IUser | null = await user.findOne({ email }).exec();
+    if (!foundUser) {
+      res.status(400).json({ message: "Invalid credentials" });
+      return;
+    }
 
+    // check password
     const isMatch = await bcrypt.compare(password, foundUser.password);
-    if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
+    if (!isMatch) {
+      res.status(400).json({ message: "Invalid credentials" });
+      return;
+    }
 
-    const token = jwt.sign({ id: foundUser._id }, JWT_SECRET, { expiresIn: "1h" });
+    // ✅ Generate token using shared util (same secret as middleware)
+    const token: string = generateToken(foundUser._id.toString());
 
-    res.json({ message: "Login successful", token });
+    // success response
+    res.json({
+      message: "Login successful",
+      token, // ✅ this is the same token your middleware will verify
+      user: {
+        id: foundUser._id.toString(),
+        name: foundUser.name,
+        email: foundUser.email,
+      },
+    });
   } catch (error) {
-  console.error("Login error:", error);  // 👈 log the real error
-  res.status(500).json({ message: "Error in login", error });
+    console.error("Login error:", error);
+    res.status(500).json({ message: "Error in login", error });
 }
 
 };

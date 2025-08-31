@@ -30,14 +30,14 @@ export const addProduct = async (req: Request, res: Response) => {
   }
 };
 
+// Get all products
 export const getProducts = async (req: Request, res: Response) => {
   try {
-    const { userId } = req.body;
-
-    const products = await Product.find({ user: userId });
+    const products = await Product.find({ user: req.userId }); // ✅ use req.userId
     res.json(products);
   } catch (error) {
     res.status(500).json({ message: "Error fetching products", error });
   }
 };
+
 

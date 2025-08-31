@@ -7,6 +7,14 @@ interface JwtPayload {
   id: string;
 }
 
+declare global {
+  namespace Express {
+    interface Request {
+      userId?: string;
+    }
+  }
+}
+
 const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
 
@@ -17,12 +25,15 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
   }
 
   const token = authHeader.split(" ")[1];
+  console.log("Extracted Token:", token);
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET || "secretkey") as JwtPayload;
-    req.body.userId = decoded.id; // ✅ inject userId automatically
+    console.log("Decoded Payload:", decoded);
+    req.userId = decoded.id; // ✅ inject userId automatically
     next();
   } catch (error) {
+    console.error("JWT Verify Error:", error);
     res.status(401).json({ message: "Invalid token" });
   }
 };
